@@ -3,8 +3,8 @@ import { Box, Text } from 'ink';
 import type { BacklogItem } from '../core/backlog.js';
 import { palette, typeStyle, progressBar, progressColor, truncate, clamp } from './theme.js';
 
-export const SHIP_FRAMES = 18;
-const FILL_FRAMES = 9; // frames over which the bar eases to 100
+export const SHIP_FRAMES = 36;
+const FILL_FRAMES = 18; // frames over which the bar eases to 100
 
 export interface ShipFx {
   shipped?: { id: string; title: string; target?: string };
