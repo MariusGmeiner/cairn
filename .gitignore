@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.log
+*.tsbuildinfo
+.DS_Store
+
+# CAIRN's own local activity log if this repo is dogfooded
+.cairn/activity/
