@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, Text } from 'ink';
 import type { BacklogItem } from '../core/backlog.js';
-import { palette, typeStyle, progressBar, progressColor, truncate } from './theme.js';
+import { palette, typeStyle, progressBar, progressColor, truncate, clamp } from './theme.js';
 
-export const SHIP_FRAMES = 16;
+export const SHIP_FRAMES = 18;
+const FILL_FRAMES = 9; // frames over which the bar eases to 100
 
 export interface ShipFx {
   shipped?: { id: string; title: string; target?: string };
@@ -14,17 +15,32 @@ export interface ShipFx {
   frame: number;
 }
 
+// ── motion + colour helpers ──────────────────────────────────────────────────
+
+const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
+const toHex = (n: number): string =>
+  Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+
+/** Very dark green → bright green as t goes 0→1 (truecolor; degrades to ANSI green). */
+function greenRamp(t: number): string {
+  return `#${toHex(lerp(12, 92, t))}${toHex(lerp(42, 236, t))}${toHex(lerp(22, 110, t))}`;
+}
+
+/** Muted green for the off-beat sparkles (calmer than grey, less flicker). */
+const SPARK_SOFT = '#2f7d4e';
+
 const SPARKLES = ['✦', '✶', '✷', '✺', '✦', '✸'];
 
 function SparkleRow({ frame, width, count }: { frame: number; width: number; count: number }) {
-  const cells = Math.max(6, Math.min(14, Math.floor(width / 4)));
-  const head = frame % cells;
+  const cells = clamp(Math.floor(width / 4), 6, 14);
+  const wave = Math.floor(frame / 2); // advance the shimmer every 2 frames, not every frame
   const glyphs: React.ReactNode[] = [];
   for (let i = 0; i < cells; i++) {
-    const bright = (i + head) % 3 === 0;
-    const g = SPARKLES[(i + frame) % SPARKLES.length];
+    const bright = (i + wave) % 3 === 0;
+    const g = SPARKLES[(i + wave) % SPARKLES.length];
     glyphs.push(
-      <Text key={i} color={bright ? palette.good : palette.dim}>
+      <Text key={i} color={bright ? palette.good : SPARK_SOFT}>
         {g}{' '}
       </Text>,
     );
@@ -121,10 +137,19 @@ function Idle({ item, progress, width }: { item?: BacklogItem; progress: number;
   );
 }
 
-function Shipping({ fx, width, streak }: { fx: ShipFx; width: number; streak: number }) {
-  const reveal = fx.frame >= 6;
-  const fillT = Math.min(1, fx.frame / 6);
-  const shown = Math.round(fx.fromProgress + (100 - fx.fromProgress) * fillT);
+function Shipping({
+  fx,
+  width,
+  streak,
+  shown,
+  reveal,
+}: {
+  fx: ShipFx;
+  width: number;
+  streak: number;
+  shown: number;
+  reveal: boolean;
+}) {
   const title = fx.shipped?.title ?? 'action';
   const id = fx.shipped?.id ?? '';
   const titleW = Math.max(10, width - 6);
@@ -192,7 +217,30 @@ export function NextAction({
   shippedToday: number;
 }) {
   if (phase === 'ship' && fx) {
-    return <Shipping fx={fx} width={width} streak={shippedToday} />;
+    const contentW = width - 4; // inside the frame: border (2) + paddingX (2)
+    const t = easeOutCubic(clamp(fx.frame / FILL_FRAMES, 0, 1));
+    // ramp the frame dark→bright with the fill, then settle exactly on the button green
+    const frameColor = t >= 1 ? palette.good : greenRamp(t);
+    const shown = Math.round(lerp(fx.fromProgress, 100, t));
+    return (
+      <Box
+        width={width}
+        flexDirection="column"
+        borderStyle="round"
+        borderColor={frameColor}
+        paddingX={1}
+      >
+        <Shipping
+          fx={fx}
+          width={contentW}
+          streak={shippedToday}
+          shown={shown}
+          reveal={fx.frame >= FILL_FRAMES}
+        />
+      </Box>
+    );
   }
+
+  // idle: no frame — it appears only during the ship celebration
   return <Idle item={item} progress={progress} width={width} />;
 }
