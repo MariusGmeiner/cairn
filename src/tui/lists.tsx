@@ -4,7 +4,7 @@ import { palette, typeStyle, statusColor, truncate } from './theme.js';
 
 export type TypeFilter = ItemType | 'all';
 
-/** Filter chips in keybinding order: index is the digit that selects it (0–4). */
+/** Filter chips in keybinding order: position (1-based) is the digit that selects it (1–5). */
 const FILTER_ORDER: TypeFilter[] = ['all', 'core', 'feature', 'qol', 'bug'];
 
 /** A scroll window centered on the selection, clamped to the list bounds. */
@@ -72,7 +72,7 @@ function FilterChips({ active }: { active: TypeFilter }) {
         const label = f === 'all' ? 'all' : typeStyle[f].badge.toLowerCase();
         return (
           <Text key={f} color={on ? palette.accent : palette.dim} bold={on}>
-            {`${i}:${label}  `}
+            {`${i + 1}:${label}  `}
           </Text>
         );
       })}

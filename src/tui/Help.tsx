@@ -22,7 +22,7 @@ const TABKEYS: HelpLine[] = [
   { key: 'a', text: 'mark the current action shipped' },
   { key: 'v', text: 'open the selected item in a scrollable reader' },
   { key: '↑/↓', text: 'move the selection in Inbox / Backlog · scroll in the reader' },
-  { key: '0–4', text: 'filter the Backlog by type (all / core / feat / qol / bug)' },
+  { key: '1–5', text: 'filter the Backlog by type (all / core / feat / qol / bug)' },
   { key: 'q', text: 'quit' },
 ];
 

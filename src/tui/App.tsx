@@ -185,19 +185,19 @@ export function App({ paths }: { paths: CairnPaths }) {
     if (tab === 2) {
       if (key.upArrow) setBacklogSel((s) => Math.max(0, s - 1));
       else if (key.downArrow) setBacklogSel((s) => Math.min(backlog.length - 1, s + 1));
-      else if (input === '0') {
+      else if (input === '1') {
         setFilter('all');
         setBacklogSel(0);
-      } else if (input === '1') {
+      } else if (input === '2') {
         setFilter('core');
         setBacklogSel(0);
-      } else if (input === '2') {
+      } else if (input === '3') {
         setFilter('feature');
         setBacklogSel(0);
-      } else if (input === '3') {
+      } else if (input === '4') {
         setFilter('qol');
         setBacklogSel(0);
-      } else if (input === '4') {
+      } else if (input === '5') {
         setFilter('bug');
         setBacklogSel(0);
       }
@@ -211,7 +211,7 @@ export function App({ paths }: { paths: CairnPaths }) {
       : tab === 1
         ? '←/→ tabs · ↑/↓ move · v read · q quit'
         : tab === 2
-          ? '←/→ tabs · ↑/↓ move · 0–4 filter · q quit'
+          ? '←/→ tabs · ↑/↓ move · 1–5 filter · q quit'
           : '←/→ tabs · q quit';
 
   return (
