@@ -131,13 +131,13 @@ const STARTERS: SeedItem[] = [
   },
   {
     id: 'CAIRN-004',
-    title: 'Delete these starter items',
-    summary: 'Once you have the hang of it, remove the CAIRN-00x onboarding items.',
+    title: 'Retire these starters as wontdo',
+    summary: 'Once you have the hang of it, set the CAIRN-00x onboarding items to status: wontdo (not delete) — CAIRN keeps the record.',
     type: 'qol',
     area: 'onboarding',
     size: 'S',
     status: 'later',
-    notes: 'they live in .cairn/backlog/',
+    notes: 'they live in .cairn/backlog/ — change each status: to wontdo',
   },
   {
     id: 'CAIRN-005',
@@ -273,7 +273,7 @@ export function runInit(opts: InitOptions = {}): void {
     );
   if (seeded > 0)
     console.log(
-      `  ${c.good('✓ seeded')}   ${c.accent(String(seeded))} ${c.dim('starter items — delete them once you are rolling')}`,
+      `  ${c.good('✓ seeded')}   ${c.accent(String(seeded))} ${c.dim('starter items — mark them wontdo once you are rolling')}`,
     );
   const hookMsg = {
     created: c.good('✓ installed') + '  ' + c.dim('.git/hooks/post-commit'),
