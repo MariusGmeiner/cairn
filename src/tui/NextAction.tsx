@@ -97,7 +97,9 @@ function ActiveHeader({ item }: { item: BacklogItem }) {
         NEXT ACTION
       </Text>
       <Box>
-        <Text color={palette.accentDim}>{link(item.id, pathToFileURL(item.file).href)}</Text>
+        <Text color={palette.accentDim} underline>
+          {link(item.id, pathToFileURL(item.file).href)}
+        </Text>
         <Text color={palette.dim}>{'  '}</Text>
         <Text color={s.color} bold>
           {s.badge}
