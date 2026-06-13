@@ -1,7 +1,8 @@
 import React from 'react';
+import { pathToFileURL } from 'node:url';
 import { Box, Text } from 'ink';
 import type { BacklogItem } from '../core/backlog.js';
-import { palette, typeStyle, progressBar, progressColor, truncate, clamp } from './theme.js';
+import { palette, typeStyle, progressBar, progressColor, truncate, clamp, link } from './theme.js';
 
 export const SHIP_FRAMES = 36;
 const FILL_FRAMES = 18; // frames over which the bar eases to 100
@@ -66,16 +67,40 @@ function HeaderRow({ right }: { right?: React.ReactNode }) {
   );
 }
 
-function DoneButton() {
+/**
+ * The completion affordance while idle — a plain hint, deliberately not a button. The
+ * ✓ and "done" appear only during the ship animation (see Shipping), so the checkmark
+ * always means "shipped", never "click me".
+ */
+function DoneHint() {
   return (
     <Box marginTop={1}>
-      <Box borderStyle="round" borderColor={palette.good} paddingX={1}>
-        <Text color={palette.good} bold>
-          ✓ done
-        </Text>
-        <Text color={palette.dim}>{'  · press '}</Text>
-        <Text color={palette.good} bold>
-          a
+      <Text color={palette.dim}>{'   press '}</Text>
+      <Text color={palette.accent} bold>
+        a
+      </Text>
+      <Text color={palette.dim}>{' to mark shipped   ·   '}</Text>
+      <Text color={palette.accent} bold>
+        v
+      </Text>
+      <Text color={palette.dim}>{' to read the full item'}</Text>
+    </Box>
+  );
+}
+
+/** Top row of the idle Next view: the section label, the clickable id, the type badge. */
+function ActiveHeader({ item, width }: { item: BacklogItem; width: number }) {
+  const s = typeStyle[item.type];
+  return (
+    <Box justifyContent="space-between" width={width}>
+      <Text color={palette.heading} bold>
+        NEXT ACTION
+      </Text>
+      <Box>
+        <Text color={palette.accentDim}>{link(item.id, pathToFileURL(item.file).href)}</Text>
+        <Text color={palette.dim}>{'  '}</Text>
+        <Text color={s.color} bold>
+          {s.badge}
         </Text>
       </Box>
     </Box>
@@ -101,30 +126,24 @@ function Idle({ item, progress, width }: { item?: BacklogItem; progress: number;
       </Box>
     );
   }
-  const s = typeStyle[item.type];
-  const titleW = Math.max(10, width - 6);
   return (
     <Box flexDirection="column">
-      <HeaderRow
-        right={
-          <Text color={s.color} bold>
-            {s.badge}
-          </Text>
-        }
-      />
+      <ActiveHeader item={item} width={width} />
       <Box marginTop={1}>
         <Text color={palette.accent} bold>
           ▸{' '}
         </Text>
         <Text color={palette.heading} bold>
-          {truncate(item.title, titleW)}
+          {item.title}
         </Text>
       </Box>
       {item.target && (
-        <Box>
-          <Text color={palette.dim}>{'   target '}</Text>
-          <Text color={palette.accentDim}>▸ </Text>
-          <Text color={palette.text}>{truncate(item.target, titleW - 4)}</Text>
+        <Box width={width}>
+          <Text>
+            <Text color={palette.dim}>{'   target '}</Text>
+            <Text color={palette.accentDim}>▸ </Text>
+            <Text color={palette.text}>{item.target}</Text>
+          </Text>
         </Box>
       )}
       <Box marginTop={1}>
@@ -132,7 +151,7 @@ function Idle({ item, progress, width }: { item?: BacklogItem; progress: number;
         <Text color={progressColor(progress)}>{progressBar(progress, 16)}</Text>
         <Text color={palette.dim}>{`  ${progress}%`}</Text>
       </Box>
-      <DoneButton />
+      <DoneHint />
     </Box>
   );
 }

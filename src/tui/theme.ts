@@ -67,3 +67,38 @@ export function truncate(s: string, max: number): string {
   if (max <= 1) return s.slice(0, Math.max(0, max));
   return s.length > max ? s.slice(0, max - 1) + '…' : s;
 }
+
+/**
+ * OSC-8 hyperlink: renders as `label`, clickable (Ctrl/⌘+Click) in terminals that
+ * support it, and harmless plain text elsewhere. Width measurement strips the escape,
+ * so layout is unaffected.
+ */
+export function link(label: string, url: string): string {
+  const OSC = ']8;;';
+  const BEL = '';
+  return `${OSC}${url}${BEL}${label}${OSC}${BEL}`;
+}
+
+/**
+ * Word-wrap a single logical line into display rows no wider than `width`, breaking
+ * over-long tokens hard. Used to page long content one terminal row at a time.
+ */
+export function wrapText(line: string, width: number): string[] {
+  if (width <= 0 || line.length <= width) return [line];
+  const out: string[] = [];
+  let cur = '';
+  for (const word of line.split(/(\s+)/)) {
+    if (cur.length > 0 && (cur + word).length > width) {
+      out.push(cur.replace(/\s+$/, ''));
+      cur = word.replace(/^\s+/, '');
+    } else {
+      cur += word;
+    }
+    while (cur.length > width) {
+      out.push(cur.slice(0, width));
+      cur = cur.slice(width);
+    }
+  }
+  if (cur.length > 0) out.push(cur);
+  return out.length > 0 ? out : [''];
+}
