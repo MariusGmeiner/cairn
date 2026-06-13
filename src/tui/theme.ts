@@ -16,6 +16,10 @@ export const palette = {
   bad: 'redBright',
   empty: 'gray',
   live: 'greenBright',
+  // Two-tone "lit from the right": a bright edge catching the light + a shadow body.
+  // Reused across the logo, lettering, rules, and markers for one consistent light source.
+  lit: 'cyanBright',
+  shadow: 'cyan',
 } as const;
 
 /** Each backlog type gets one stable color + a short uppercase badge. */
