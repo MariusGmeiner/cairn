@@ -1,9 +1,9 @@
 import { Box, Text } from 'ink';
 import { palette } from './theme.js';
 
-/** The braille brand mark: a small pile + the CAIRN wordmark. */
+/** The braille brand mark: a small pile + the CAIRN wordmark (one space per letter). */
 const LOGO_PILE = '⣠⣾⣷⣄';
-const LOGO_WORD = '⣏⡁⡮⡆⣹⡁⡯⡂⣗⣼';
+const LOGO_WORD = '⣏⡁ ⡮⡆ ⣹⡁ ⡯⡂ ⣗⣼';
 
 /**
  * Render text "lit from the right": the left body in shadow, the right edge bright, so
@@ -15,6 +15,20 @@ function LitText({ text, bold }: { text: string; bold?: boolean }) {
     <Text bold={bold}>
       <Text color={palette.shadow}>{text.slice(0, cut)}</Text>
       <Text color={palette.lit}>{text.slice(cut)}</Text>
+    </Text>
+  );
+}
+
+/** Light a spaced word per letter: split on spaces and lit-shade each letter on its own. */
+function LitWord({ text, bold }: { text: string; bold?: boolean }) {
+  return (
+    <Text>
+      {text.split(' ').map((letter, i) => (
+        <Text key={i}>
+          {i > 0 ? ' ' : ''}
+          <LitText text={letter} bold={bold} />
+        </Text>
+      ))}
     </Text>
   );
 }
@@ -39,8 +53,8 @@ export function Header({ repo, clock }: { repo: string; clock: string }) {
         <Text>{' '}</Text>
         <LitText text={LOGO_PILE} bold />
         <Text>{' '}</Text>
-        <LitText text={LOGO_WORD} bold />
-        <Text color={palette.dim}>{slogan}</Text>
+        <LitWord text={LOGO_WORD} bold />
+        <LitWord text={slogan} />
       </Box>
       <Box justifyContent="space-between">
         <Box>
