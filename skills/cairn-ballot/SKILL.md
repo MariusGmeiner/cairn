@@ -1,5 +1,5 @@
 ---
-name: ballot
+name: cairn-ballot
 description: every 2nd Monday — propose exactly 2 vetted day-or-two features to vote on
 ---
 
@@ -17,7 +17,7 @@ Operate on `<git root>/.cairn/`. If there is no `.cairn/`, tell the user to run
 ## 0. Is a vote due?
 
 ```sh
-cairn config        # shows "next vote: due now — run /ballot" when it's time
+cairn config        # shows "next vote: due now — run /cairn-ballot" when it's time
 ```
 
 The cadence is **every second Monday**, brought forward to the **Monday after the voted

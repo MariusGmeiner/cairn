@@ -111,8 +111,8 @@ const STARTERS: SeedItem[] = [
   },
   {
     id: 'CAIRN-002',
-    title: 'Capture a real idea with /capture',
-    summary: 'Run /capture in the Claude Code pane and answer a couple of questions.',
+    title: 'Capture a real idea with /cairn-capture',
+    summary: 'Run /cairn-capture in the Claude Code pane and answer a couple of questions.',
     type: 'feature',
     area: 'onboarding',
     size: 'S',
@@ -121,8 +121,8 @@ const STARTERS: SeedItem[] = [
   },
   {
     id: 'CAIRN-003',
-    title: 'Shape the roadmap with /plan',
-    summary: 'Run /plan to refresh Now / Next / Later and pre-compute the queue.',
+    title: 'Shape the roadmap with /cairn-plan',
+    summary: 'Run /cairn-plan to refresh Now / Next / Later and pre-compute the queue.',
     type: 'core',
     area: 'onboarding',
     size: 'S',
@@ -291,7 +291,7 @@ export function runInit(opts: InitOptions = {}): void {
 
   console.log('\n  ' + c.heading('Next:'));
   console.log(
-    `    ${c.accent('cairn install-skills')}   ${c.dim('— add /capture /plan /sync /shutdown to Claude Code')}`,
+    `    ${c.accent('cairn install-skills')}   ${c.dim('— add /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown to Claude Code')}`,
   );
   console.log(
     `    ${c.accent('cairn')}                  ${c.dim('— open the board (left pane); run Claude Code on the right')}`,

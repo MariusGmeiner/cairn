@@ -1,5 +1,5 @@
 ---
-name: capture
+name: cairn-capture
 description: add a request — asks the open questions, triages, then files it
 ---
 

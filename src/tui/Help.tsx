@@ -9,12 +9,12 @@ interface HelpLine {
 
 /** The CAIRN working loop, one line each. */
 const FLOW: HelpLine[] = [
-  { key: '/capture', text: 'jot an idea — it asks a couple questions, then files it in the inbox' },
-  { key: '/plan', text: 'rank the backlog into now / next / later and pre-compute the queue' },
+  { key: '/cairn-capture', text: 'jot an idea — it asks a couple questions, then files it in the inbox' },
+  { key: '/cairn-plan', text: 'rank the backlog into now / next / later and pre-compute the queue' },
   { key: 'work', text: 'do the next action in your editor; commit as usual' },
-  { key: '/sync', text: 'pull progress from your commits and advance when the target is met' },
-  { key: '/shutdown', text: 'close the day — daily log + the biweekly QoL vote' },
-  { key: '/ballot', text: 'every second Monday, vote on the next small feature to build' },
+  { key: '/cairn-sync', text: 'pull progress from your commits and advance when the target is met' },
+  { key: '/cairn-shutdown', text: 'close the day — daily log + the biweekly QoL vote' },
+  { key: '/cairn-ballot', text: 'every second Monday, vote on the next small feature to build' },
 ];
 
 const TABKEYS: HelpLine[] = [

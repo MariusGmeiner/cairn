@@ -31,7 +31,7 @@ function help(): void {
   ${c.heading('Usage')}
     ${A('cairn')}                  ${D('open the board (TUI) for the current repo')}
     ${A('cairn init')}             ${D('scaffold .cairn/ and install the post-commit hook')}
-    ${A('cairn install-skills')}   ${D('install /capture /plan /sync /shutdown into ~/.claude/skills')}
+    ${A('cairn install-skills')}   ${D('install /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown into ~/.claude/skills')}
     ${A('cairn advance')}          ${D('mark the current action done + advance (same as [a] in the TUI)')}
     ${A('cairn commit [msg]')}     ${D('commit .cairn changes per commit mode (cairn: prefix, or ride-along)')}
     ${A('cairn config')}           ${D('show/set commit mode + ballot cadence')}
@@ -62,12 +62,12 @@ function runAdvanceCli(): void {
   }
   const result = advance(paths);
   if (!result.changed) {
-    console.log(c.dim('Nothing to advance — the queue is empty. Run /plan.'));
+    console.log(c.dim('Nothing to advance — the queue is empty. Run /cairn-plan.'));
     return;
   }
   if (result.shipped)
     console.log(`${c.good('✓ shipped')}  ${result.shipped.id}  ${c.dim(result.shipped.title)}`);
-  if (result.queueEmpty) console.log(c.warn('  queue now empty — run /plan to refill'));
+  if (result.queueEmpty) console.log(c.warn('  queue now empty — run /cairn-plan to refill'));
   else if (result.next)
     console.log(`${c.accent('▸ now')}      ${result.next.id}  ${c.dim(result.next.title)}`);
 

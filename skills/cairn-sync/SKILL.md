@@ -1,5 +1,5 @@
 ---
-name: sync
+name: cairn-sync
 description: pull progress from your git commits and advance the current action
 ---
 
@@ -48,7 +48,7 @@ active.
 If the target is **not** met, leave `status: now`, keep the updated progress, and
 persist the progress note with `cairn commit "sync: <ID> progress"` (it honors the
 commit mode). Say one line on what remains. If the queue is running low or empty,
-suggest `/plan`.
+suggest `/cairn-plan`.
 
 Tone: level and factual. The reward for finishing is in the TUI's advance animation —
 you just report the truth.

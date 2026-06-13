@@ -11,7 +11,7 @@ export interface SkillInfo {
 }
 
 /** Preferred display order; unknown skills sort after, alphabetically. */
-const ORDER = ['capture', 'plan', 'sync', 'shutdown', 'ballot'];
+const ORDER = ['cairn-capture', 'cairn-plan', 'cairn-sync', 'cairn-shutdown', 'cairn-ballot'];
 
 function orderRank(name: string): number {
   const i = ORDER.indexOf(name);

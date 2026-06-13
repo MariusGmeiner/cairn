@@ -90,7 +90,7 @@ export function App({ paths }: { paths: CairnPaths }) {
     const fromProgress = data.current.progress ?? 0;
     const result = advance(paths);
     if (!result.changed) {
-      flash('nothing to advance — run /plan to queue work');
+      flash('nothing to advance — run /cairn-plan to queue work');
       return;
     }
     setFx({
@@ -272,7 +272,7 @@ export function App({ paths }: { paths: CairnPaths }) {
                         <Text color={palette.text}>{nextCard.title}</Text>
                       </Text>
                     ) : (
-                      <Text color={palette.dim}>nothing queued · /plan</Text>
+                      <Text color={palette.dim}>nothing queued · /cairn-plan</Text>
                     )}
                   </Box>
                 )}

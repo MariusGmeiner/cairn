@@ -47,7 +47,7 @@ export function writeCurrent(currentPath: string, action: Partial<CurrentAction>
   fs.mkdirSync(path.dirname(currentPath), { recursive: true });
   if (!action.id) {
     const body =
-      '# No active action\n\nThe queue is empty. Run `/plan` in the Claude Code pane to choose what is next.\n';
+      '# No active action\n\nThe queue is empty. Run `/cairn-plan` in the Claude Code pane to choose what is next.\n';
     fs.writeFileSync(currentPath, body);
     return;
   }
@@ -87,9 +87,9 @@ export function writeQueue(
   titleOf?: (id: string) => string | undefined,
 ): void {
   fs.mkdirSync(path.dirname(queuePath), { recursive: true });
-  const lines = ['# Queue', '<!-- ordered upcoming items · pre-computed by /plan -->', ''];
+  const lines = ['# Queue', '<!-- ordered upcoming items · pre-computed by /cairn-plan -->', ''];
   if (ids.length === 0) {
-    lines.push('_(empty — run `/plan` to refill)_');
+    lines.push('_(empty — run `/cairn-plan` to refill)_');
   } else {
     for (const id of ids) {
       const title = titleOf?.(id);

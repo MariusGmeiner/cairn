@@ -1,5 +1,5 @@
 ---
-name: shutdown
+name: cairn-shutdown
 description: close the day — Newport shutdown ritual, daily log, biweekly QoL vote
 ---
 
@@ -86,11 +86,11 @@ send, not an automated post.
 The two-option vote has its own skill. Check whether one is due:
 
 ```sh
-cairn config        # shows "next vote: due now — run /ballot" when it's time
+cairn config        # shows "next vote: due now — run /cairn-ballot" when it's time
 ```
 
 The cadence is **every second Monday**, brought forward to the **Monday after the voted
-feature shipped**. If a vote is due, just point the user at **`/ballot`** — it proposes
+feature shipped**. If a vote is due, just point the user at **`/cairn-ballot`** — it proposes
 exactly two pre-vetted, day-or-two options for the team to vote on. Don't assemble the
 ballot here.
 

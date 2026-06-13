@@ -46,7 +46,7 @@ export function Footer({
   const live = '● live';
   const mode = commitMode ? `  · ${commitMode}` : '';
   const keyHint = `${keys ?? '[a]dvance · [q]uit'}  `;
-  const center = message ?? (ballotDue ? 'ballot due · /ballot' : '');
+  const center = message ?? (ballotDue ? 'ballot due · /cairn-ballot' : '');
   const used = left.length + live.length + mode.length + center.length + keyHint.length;
   const gap = Math.max(2, width - used);
   const lead = Math.floor(gap / 2);

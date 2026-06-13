@@ -1,5 +1,5 @@
 ---
-name: plan
+name: cairn-plan
 description: refresh now / next / later and pre-compute the next-action queue
 ---
 
@@ -25,7 +25,7 @@ Decide each item's `status`:
 - `now` — the single thing being actively worked (usually keep the existing one).
 - `next` — queued, in priority order.
 - `later` — someday/backlog.
-- leave `inbox` items alone unless triage is obviously overdue (then suggest `/capture`).
+- leave `inbox` items alone unless triage is obviously overdue (then suggest `/cairn-capture`).
 
 **Ranking rule:** `core` work outranks `feature`, and both outrank `qol`. Never
 auto-prioritize a community/QoL item above core work — call it out if the user asks for
@@ -45,7 +45,7 @@ Rewrite `.cairn/board/queue.md` as the ordered list of upcoming item ids:
 
 ```markdown
 # Queue
-<!-- ordered upcoming items · pre-computed by /plan -->
+<!-- ordered upcoming items · pre-computed by /cairn-plan -->
 
 - CRM-007 · Wire tag service
 - CRM-012 · Bulk-edit UI

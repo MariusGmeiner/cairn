@@ -60,7 +60,7 @@ export function runConfig(args: string[]): void {
       console.log(`  ${c.dim('voted feature')}   ${c.dim('none')}`);
     }
     const nextStr = due
-      ? c.warn('due now — run /ballot')
+      ? c.warn('due now — run /cairn-ballot')
       : ndKey
         ? `${ndKey} (Mon)` + (sinceNext != null ? c.dim(`  · in ${-sinceNext}d`) : '')
         : c.dim('—');

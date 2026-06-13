@@ -120,7 +120,7 @@ function Idle({ item, progress, width }: { item?: BacklogItem; progress: number;
         </Box>
         <Text color={palette.dim}>
           {'   run '}
-          <Text color={palette.accent}>/plan</Text>
+          <Text color={palette.accent}>/cairn-plan</Text>
           {' in the Claude Code pane to choose what is next'}
         </Text>
       </Box>
@@ -205,7 +205,7 @@ function Shipping({
         <Box marginTop={1}>
           <Text color={palette.dim}>{'   next '}</Text>
           {fx.queueEmpty ? (
-            <Text color={palette.warn}>queue empty — run /plan</Text>
+            <Text color={palette.warn}>queue empty — run /cairn-plan</Text>
           ) : (
             <Text>
               <Text color={palette.accent}>▸ </Text>

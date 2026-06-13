@@ -36,7 +36,7 @@ export function InboxList({
     return (
       <Box>
         <Text color={palette.dim}>inbox is empty · run </Text>
-        <Text color={palette.accent}>/capture</Text>
+        <Text color={palette.accent}>/cairn-capture</Text>
         <Text color={palette.dim}> in the Claude pane to add an idea</Text>
       </Box>
     );
@@ -102,7 +102,7 @@ export function BacklogList({
       <FilterChips active={filter} />
       {items.length === 0 ? (
         <Text color={palette.dim}>
-          {filter === 'all' ? 'backlog is empty · run /plan' : `no ${filter} items`}
+          {filter === 'all' ? 'backlog is empty · run /cairn-plan' : `no ${filter} items`}
         </Text>
       ) : (
         <Box flexDirection="column">
