@@ -61,7 +61,7 @@ repo's `.cairn/` files:
 
 Global, installed once:
 
-- The four skills in your user-level Claude config (`~/.claude/skills/`) so they're available
+- The five skills in your user-level Claude config (`~/.claude/skills/`) so they're available
   in every repo. Each SKILL.md encodes the `.cairn/` convention.
 - The `cairn` binary on your PATH.
 
@@ -138,7 +138,7 @@ Advancing is deterministic and free: in the TUI you click a button when you've h
 target. The TUI marks the current item `shipped`, keeps a note about it in the activity log (
 `.cairn/activity/log.jsonl`), pops the next id from `queue.md`, sets it
 `now`, and writes its target into `current.md` — no model involved. If the queue is empty, it
-tells you to run `/plan` in the right pane. You only spend a brain pass when the queue runs
+tells you to run `/cairn-plan` in the right pane. You only spend a brain pass when the queue runs
 low, the inbox piles up, or priorities shift — not every time you finish a step. That's what
 keeps your focus stable.
 
@@ -251,10 +251,10 @@ Layout:
  │ • export to xlsx?   • merge dupes faster   • …         │
  ├────────────────────────────────────────────────────────┤
  │ SKILLS  ·  run these in the Claude Code pane →         │
- │  /capture   add a request — asks questions, then files │
- │  /plan      refresh now / next / later + next action   │
- │  /sync      pull git progress, advance current action  │
- │  /shutdown  end-of-day log + team update               │
+ │  /cairn-capture   add a request — asks questions, then files │
+ │  /cairn-plan      refresh now / next / later + next action   │
+ │  /cairn-sync      pull git progress, advance current action  │
+ │  /cairn-shutdown  end-of-day log + team update               │
  └────────────────────────────────────────────────────────┘
   watching ./.cairn  ● live          [a]dvance   [q]uit
 ```
@@ -271,7 +271,7 @@ The brain must stay on your subscription, not API billing:
 
 ## 11. Build phases
 
-- **v1 — thin slice (start here):** the `cairn init` scaffold + schema + the four skills
+- **v1 — thin slice (start here):** the `cairn init` scaffold + schema + the five skills
   (global), the TUI display with `[a]dvance` (or `Done` button), and `capture` + `plan` run by hand. No git
   ingestion yet. Live with the loop in one project for a few days.
 - **v2 — auto sync:** the post-commit hook + `record-commit`, and the git-aware part of

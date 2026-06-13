@@ -26,7 +26,7 @@ function help(): void {
   const A = c.accent;
   const D = c.dim;
   console.log(`
-  ${c.heading('▲ CAIRN')} ${D('· Command-line Assistant Interface for Roadmaps and Next actions')}
+  ${c.heading('⣠⣾⣷⣄ CAIRN')} ${D('· Command-line Assistant Interface for Roadmaps and Next actions')}
 
   ${c.heading('Usage')}
     ${A('cairn')}                  ${D('open the board (TUI) for the current repo')}
@@ -43,7 +43,7 @@ function help(): void {
     ${A('-v, --version')}          ${D('print version')}
     ${A('-h, --help')}             ${D('print this help')}
 
-  ${D('Inside the TUI:')}  ${A('[a]')} ${D('advance')}   ${A('[q]')} ${D('quit')}
+  ${D('Inside the TUI:')}  ${A('←/→')} ${D('tabs')}   ${A('a')} ${D('ship')}   ${A('v')} ${D('read')}   ${A('1–5')} ${D('filter')}   ${A('q')} ${D('quit')}
 `);
 }
 

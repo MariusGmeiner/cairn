@@ -1,6 +1,6 @@
-# ▲ CAIRN
+# ⣠⣾⣷⣄ CAIRN
 
-**Command-line Assistant Interface for Roadmaps and Next actions.**
+**Command-line Assistant Interface for Roadmaps and Next actions** — *marks your next step.*
 
 A project-agnostic, terminal-native PM assistant for a solo developer. Installed once
 globally, it works inside *any* git repo: it keeps a clean per-repo backlog, always
@@ -23,6 +23,34 @@ markdown files:
           └───────────────────────────────────┘
 ```
 
+The board is a fullscreen, tabbed TUI — **Next · Inbox · Backlog · Help**, switched with
+the arrow keys:
+
+```
+╭──────────────────────────────────────────────────────────────╮
+│  ⣠⣾⣷⣄ ⣏⡁⡮⡆⣹⡁⡯⡂⡗⡅ · marks your next step                    │
+│  Project: my-app                            2026-06-13  09:41 │
+│ ──────────────────────────────────────────────────────────── │
+│ ▸ Next     Inbox 3     Backlog     Help                      │
+│ ──────────────────────────────────────────────────────────── │
+│ NEXT ACTION                                   CRM-042   FEAT  │
+│                                                              │
+│ ▸ Bulk-edit contact tags                                     │
+│    target ▸ select multiple contacts, apply a tag in one go  │
+│    ░░░░░░░░░░░░░░░░  0%                                       │
+│    press a to mark shipped   ·   v to read the full item     │
+│                                                              │
+│   next   Wire the tag service                                │
+╰──────────────────────────────────────────────────────────────╯
+  watching ./.cairn ● live · auto       ←/→ tabs · a ship · v read · q quit
+```
+
+- **Next** — the one active action: clickable id (Ctrl/⌘+Click opens its `.md`), the full
+  target, `v` to read the whole item, and the next-up item at the bottom.
+- **Inbox** — untriaged ideas; the tab badge shows how many are waiting.
+- **Backlog** — the now/next/later roadmap, scrollable, `1–5` to filter by type.
+- **Help** — the working loop, the keys, and the installed skills.
+
 ## Install
 
 ```sh
@@ -30,7 +58,7 @@ git clone <this repo> && cd cairn
 npm install          # also builds via "prepare"
 npm link             # puts `cairn` on your PATH
 
-cairn install-skills # add /capture /plan /sync /shutdown to ~/.claude/skills
+cairn install-skills # add /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown /cairn-ballot to ~/.claude/skills
 ```
 
 > Requires Node ≥ 18 and git. Renders in Windows Terminal / Git Bash (box-drawing +
@@ -47,16 +75,18 @@ cairn          # open the board (left pane)
 Open Claude Code in a second pane in the same folder and drive the brain with the
 skills:
 
-| skill        | what it does                                              |
-|--------------|-----------------------------------------------------------|
-| `/capture`   | add a request — asks the open questions, triages, files it |
-| `/plan`      | refresh Now / Next / Later + pre-compute the next-action queue |
-| `/sync`      | pull progress from your commits, advance the current action |
-| `/shutdown`  | Cal-Newport shutdown ritual — daily log + team update     |
-| `/ballot`    | every 2nd Monday: propose exactly 2 vetted day-or-two options to vote on |
+| skill              | what it does                                              |
+|--------------------|-----------------------------------------------------------|
+| `/cairn-capture`   | add a request — asks the open questions, triages, files it |
+| `/cairn-plan`      | refresh Now / Next / Later + pre-compute the next-action queue |
+| `/cairn-sync`      | pull progress from your commits, advance the current action |
+| `/cairn-shutdown`  | Cal-Newport shutdown ritual — daily log + team update     |
+| `/cairn-ballot`    | every 2nd Monday: propose exactly 2 vetted day-or-two options to vote on |
 
-In the TUI: **`[a]`** advance (ship the current action, pop the next), **`[q]`** quit.
-The board watches `.cairn/` and re-renders the instant a skill edits a file.
+In the TUI: **`←/→`** switch tabs · **`a`** ship the current action (pop the next) ·
+**`v`** read the full item · **`↑/↓`** move the list selection · **`1–5`** filter the
+backlog by type · **`q`** quit. The board watches `.cairn/` and re-renders the instant a
+skill edits a file.
 
 ## Layout (`cairn init` creates this)
 
@@ -65,8 +95,8 @@ The board watches `.cairn/` and re-renders the instant a skill edits a file.
   backlog/      one markdown file per item (YAML frontmatter)
   board/
     current.md  the active next action + target + progress
-    queue.md    ordered upcoming item ids (pre-computed by /plan)
-  daily/        end-of-day summaries (written by /shutdown)
+    queue.md    ordered upcoming item ids (pre-computed by /cairn-plan)
+  daily/        end-of-day summaries (written by /cairn-shutdown)
   activity/     this repo's commits — gitignored, written by the hook
 ```
 
@@ -109,7 +139,7 @@ The TUI never calls a model. Keep the brain on your subscription:
 ```
 cairn                  open the board (TUI) for the current repo
 cairn init [--bare]    scaffold .cairn/ + install the post-commit hook
-cairn install-skills   install the four skills into ~/.claude/skills [--force]
+cairn install-skills   install the five skills into ~/.claude/skills [--force]
 cairn advance          ship the current action + advance (same as [a])
 cairn commit [msg]     commit .cairn changes per commit mode (cairn: prefix / ride-along)
 cairn config           show/set commit mode + ballot cadence
@@ -139,11 +169,11 @@ The TUI's `[a]`, `cairn advance`, and the skills all honor the mode automaticall
 ## The biweekly vote
 
 Every **second Monday** — or the **Monday after the last voted feature shipped** — the
-board shows a **ballot due** chip. Run **`/ballot`**: it proposes **exactly two** options,
-each a `feature`/`qol` pre-vetted against the actual code and scoped to a ~98%-certain
-**1–2 day** build, with explicit out-of-scope cuts. The team votes; the single winner is
-queued for the next cycle. No voting on the raw backlog, no items that turn out to be a
-pain to implement.
+board shows a **ballot due** chip. Run **`/cairn-ballot`**: it proposes **exactly two**
+options, each a `feature`/`qol` pre-vetted against the actual code and scoped to a
+~98%-certain **1–2 day** build, with explicit out-of-scope cuts. The team votes; the
+single winner is queued for the next cycle. No voting on the raw backlog, no items that
+turn out to be a pain to implement.
 
 `cairn config` shows the next vote date and the voted feature's status.
 `cairn config ballot-done <winner-id>` records a held vote + its winner and resets the

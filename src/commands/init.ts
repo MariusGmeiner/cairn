@@ -255,7 +255,7 @@ export function runInit(opts: InitOptions = {}): void {
   const hooksWarn = globalHooksPathWarning(root);
 
   // Report.
-  console.log(c.heading('\n  ▲ CAIRN initialized') + c.dim(`  ·  ${path.basename(root)}`) + '\n');
+  console.log(c.heading('\n  ⣠⣾⣷⣄ CAIRN initialized') + c.dim(`  ·  ${path.basename(root)}`) + '\n');
   console.log(
     `  ${fresh ? c.good('✓ created') : c.dim('• present')}  ${c.dim('.cairn/')} ${c.dim('(backlog · board · daily · activity)')}`,
   );
