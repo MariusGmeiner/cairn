@@ -2,10 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { CairnPaths } from './paths.js';
 
-export type CommitMode = 'auto' | 'ride-along';
+export type CommitMode = 'auto' | 'ride-along' | 'batch';
 
 export interface CairnConfig {
-  /** auto = CAIRN commits its own .cairn changes with a `cairn:` prefix.
+  /** auto = CAIRN commits its own .cairn changes on every action with a `cairn:` prefix.
+   *  batch = CAIRN defers; the whole session's .cairn changes land as one `cairn:` commit
+   *          at /cairn-shutdown (or `cairn commit --flush`). The default — keeps history readable.
    *  ride-along = CAIRN only writes files; they go in with your next code commit. */
   commitMode: CommitMode;
   /** date the last vote was held (YYYY-MM-DD) — anchors the fortnightly Monday cadence. */
@@ -16,7 +18,7 @@ export interface CairnConfig {
   votedFeatureShipped?: string;
 }
 
-const DEFAULTS: CairnConfig = { commitMode: 'auto' };
+const DEFAULTS: CairnConfig = { commitMode: 'batch' };
 
 /** Votes recur every second Monday. */
 export const BALLOT_WEEKS = 2;
@@ -30,8 +32,9 @@ export function readConfig(paths: CairnPaths): CairnConfig {
   if (!fs.existsSync(file)) return { ...DEFAULTS };
   try {
     const raw = JSON.parse(fs.readFileSync(file, 'utf8')) as Partial<CairnConfig>;
+    const cm = raw.commitMode;
     return {
-      commitMode: raw.commitMode === 'ride-along' ? 'ride-along' : 'auto',
+      commitMode: cm === 'ride-along' || cm === 'batch' || cm === 'auto' ? cm : 'batch',
       lastBallot: typeof raw.lastBallot === 'string' ? raw.lastBallot : undefined,
       votedFeature: typeof raw.votedFeature === 'string' ? raw.votedFeature : undefined,
       votedFeatureShipped:

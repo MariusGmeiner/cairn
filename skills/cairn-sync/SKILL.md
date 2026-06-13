@@ -40,15 +40,16 @@ ship is logged and the queue pops exactly like pressing `[a]`:
 cairn advance
 ```
 
-That marks the current item `shipped`, logs a `ship` event, promotes the next queued
-id to `now`, writes its target into `current.md`, **and commits per the repo's commit
-mode** (cairn: prefix, or ride-along). Then briefly confirm what shipped and what's now
-active.
+That marks the current item `shipped`, moves its file to `.cairn/archive/` (so planning only
+ever scans live work), logs a `ship` event, promotes the next queued id to `now`, writes its
+target into `current.md`, **and commits per the repo's commit mode** — deferred under the
+default batch mode (it lands in the day's one commit at /cairn-shutdown), immediate under auto.
+Then briefly confirm what shipped and what's now active.
 
 If the target is **not** met, leave `status: now`, keep the updated progress, and
 persist the progress note with `cairn commit "sync: <ID> progress"` (it honors the
-commit mode). Say one line on what remains. If the queue is running low or empty,
-suggest `/cairn-plan`.
+commit mode — batch defers it to shutdown). Say one line on what remains. If the queue is
+running low or empty, suggest `/cairn-plan`.
 
 Tone: level and factual. The reward for finishing is in the TUI's advance animation —
 you just report the truth.

@@ -1,5 +1,6 @@
 import { readBacklog, indexById, updateItemFields, BacklogItem } from './backlog.js';
 import { readCurrent, writeCurrent, readQueue, writeQueue } from './board.js';
+import { archiveItemFile } from './archive.js';
 import { appendActivity } from './activity.js';
 import { readConfig, updateConfig } from './config.js';
 import type { CairnPaths } from './paths.js';
@@ -39,6 +40,8 @@ export function advance(paths: CairnPaths, now: Date = new Date()): AdvanceResul
     const target = current.target ?? item?.target;
     if (item) {
       updateItemFields(item.file, { status: 'shipped', shipped: today(now) });
+      // Terminal items leave the active backlog so planning only ever scans live work.
+      archiveItemFile(paths, item.file);
     }
     shipped = { id: current.id, title, target };
     appendActivity(paths.activityLog, {

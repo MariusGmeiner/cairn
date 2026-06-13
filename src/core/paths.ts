@@ -37,6 +37,7 @@ export interface CairnPaths {
   root: string;
   cairn: string;
   backlog: string;
+  archive: string;
   board: string;
   current: string;
   queue: string;
@@ -55,6 +56,7 @@ export function cairnPaths(root: string): CairnPaths {
     root,
     cairn,
     backlog: path.join(cairn, 'backlog'),
+    archive: path.join(cairn, 'archive'),
     board,
     current: path.join(board, 'current.md'),
     queue: path.join(board, 'queue.md'),

@@ -58,9 +58,10 @@ the board is never empty after planning.)
 
 ## 5. Persist
 
-Run `cairn commit "plan: refreshed roadmap"`. It commits the re-ranked items, the queue,
-and current.md under a `cairn:` prefix, or no-ops in ride-along mode. Let the tool honor
-the commit mode rather than running git yourself.
+Run `cairn commit "plan: refreshed roadmap"`. Under the default **batch** mode this defers —
+the re-ranked items, the queue, and current.md ride into the day's single `cairn:` commit at
+/cairn-shutdown (auto commits now; ride-along folds into your next code commit). Let the tool
+honor the commit mode rather than running git yourself.
 
 ## 6. Brief the user
 

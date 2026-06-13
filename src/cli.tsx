@@ -33,8 +33,8 @@ function help(): void {
     ${A('cairn init')}             ${D('scaffold .cairn/ and install the post-commit hook')}
     ${A('cairn install-skills')}   ${D('install /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown into ~/.claude/skills')}
     ${A('cairn advance')}          ${D('mark the current action done + advance (same as [a] in the TUI)')}
-    ${A('cairn commit [msg]')}     ${D('commit .cairn changes per commit mode (cairn: prefix, or ride-along)')}
-    ${A('cairn config')}           ${D('show/set commit mode + ballot cadence')}
+    ${A('cairn commit [msg]')}     ${D('commit .cairn changes per commit mode (--flush forces one now)')}
+    ${A('cairn config')}           ${D('show/set commit mode (batch default) + ballot cadence')}
     ${A('cairn record-commit')}    ${D('internal — called by the git post-commit hook')}
 
   ${c.heading('Options')}

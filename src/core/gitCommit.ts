@@ -5,11 +5,17 @@ import type { CairnPaths } from './paths.js';
 import { readConfig } from './config.js';
 
 /** Only CAIRN's own versioned files — never the gitignored activity log, never code. */
-const COMMIT_PATHS = ['.cairn/backlog', '.cairn/board', '.cairn/daily', '.cairn/config.json'];
+const COMMIT_PATHS = [
+  '.cairn/backlog',
+  '.cairn/archive',
+  '.cairn/board',
+  '.cairn/daily',
+  '.cairn/config.json',
+];
 
 export interface CommitResult {
   committed: boolean;
-  reason?: 'ride-along' | 'nothing' | 'error';
+  reason?: 'ride-along' | 'deferred' | 'nothing' | 'error';
   sha?: string;
   message?: string;
 }
@@ -68,10 +74,14 @@ export function commitCairn(paths: CairnPaths, subject: string): CommitResult {
   }
 }
 
-/** Honor the repo's commit mode: commit in auto, no-op in ride-along. */
+/**
+ * Honor the repo's commit mode: commit in auto, defer in batch (one commit at shutdown),
+ * no-op in ride-along (rides with the next code commit). Use `commitCairn` directly to
+ * force a commit regardless of mode — e.g. the `--flush` at /cairn-shutdown.
+ */
 export function maybeCommit(paths: CairnPaths, subject: string): CommitResult {
-  if (readConfig(paths).commitMode === 'ride-along') {
-    return { committed: false, reason: 'ride-along' };
-  }
+  const mode = readConfig(paths).commitMode;
+  if (mode === 'ride-along') return { committed: false, reason: 'ride-along' };
+  if (mode === 'batch') return { committed: false, reason: 'deferred' };
   return commitCairn(paths, subject);
 }

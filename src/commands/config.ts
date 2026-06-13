@@ -21,7 +21,8 @@ function today(now: Date = new Date()): string {
 function usage(): void {
   console.log(`  ${c.heading('cairn config')}
     ${c.accent('cairn config')}                            ${c.dim('show settings + next vote')}
-    ${c.accent('cairn config commit-mode')} ${c.dim('auto')}          ${c.dim('commit .cairn with a cairn: prefix')}
+    ${c.accent('cairn config commit-mode')} ${c.dim('batch')}         ${c.dim('default — one cairn: commit per session at shutdown')}
+    ${c.accent('cairn config commit-mode')} ${c.dim('auto')}          ${c.dim('a cairn: commit on every board action')}
     ${c.accent('cairn config commit-mode')} ${c.dim('ride-along')}    ${c.dim('write only; rides with your next commit')}
     ${c.accent('cairn config ballot-done')} ${c.dim('[winner-id]')}   ${c.dim('record a vote held today + its winner')}`);
 }
@@ -71,8 +72,8 @@ export function runConfig(args: string[]): void {
 
   if (sub === 'commit-mode') {
     const mode = args[1] as CommitMode | undefined;
-    if (mode !== 'auto' && mode !== 'ride-along') {
-      console.error(c.bad('Usage: cairn config commit-mode <auto|ride-along>'));
+    if (mode !== 'auto' && mode !== 'ride-along' && mode !== 'batch') {
+      console.error(c.bad('Usage: cairn config commit-mode <batch|auto|ride-along>'));
       process.exitCode = 1;
       return;
     }

@@ -76,8 +76,10 @@ Now judge impact on the active work (`.cairn/board/current.md`,
 
 ## 5. Persist
 
-Run `cairn commit "captured <ID>"`. It commits the new item (and any board edit) under a
-`cairn:` prefix, or no-ops in ride-along mode so it rides along with the next code
-commit. Let the tool decide — don't hand-roll git.
+Run `cairn commit "captured <ID>"`. Under the default **batch** mode this just records the
+file (deferred) — it lands in the day's single `cairn:` commit at /cairn-shutdown, so capturing
+mid-session doesn't litter the history. (In auto mode it commits immediately; in ride-along it
+rides with your next code commit.) The file is on disk either way, so nothing is lost. Let the
+tool honor the mode — don't hand-roll git.
 
 Keep the tone level. No celebration, no mascot — just a clear, filed decision.

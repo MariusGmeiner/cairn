@@ -233,13 +233,13 @@ export function runInit(opts: InitOptions = {}): void {
   const date = today();
   const fresh = !fs.existsSync(paths.cairn);
 
-  for (const dir of [paths.backlog, paths.board, paths.daily, paths.activity]) {
+  for (const dir of [paths.backlog, paths.archive, paths.board, paths.daily, paths.activity]) {
     fs.mkdirSync(dir, { recursive: true });
   }
   const ignore = ensureActivityIgnored(paths.rootGitignore);
   const droppedNested = dropLegacyNestedIgnore(paths.cairn);
   const wroteConfig = !fs.existsSync(configPath(paths));
-  if (wroteConfig) writeConfig(paths, { commitMode: 'auto' });
+  if (wroteConfig) writeConfig(paths, { commitMode: 'batch' });
   const cfg = readConfig(paths);
 
   let seeded = 0;
@@ -296,11 +296,15 @@ export function runInit(opts: InitOptions = {}): void {
   console.log(
     `    ${c.accent('cairn')}                  ${c.dim('— open the board (left pane); run Claude Code on the right')}`,
   );
+  const modeBlurb =
+    cfg.commitMode === 'batch'
+      ? 'CAIRN batches .cairn/ into one cairn: commit at /cairn-shutdown — keeping code history clean.'
+      : cfg.commitMode === 'ride-along'
+        ? 'CAIRN writes .cairn/ only; it rides along with your next code commit.'
+        : 'CAIRN commits .cairn/ with a cairn: prefix on every board action.';
+  console.log(`\n  ${c.dim(`commit mode is ${cfg.commitMode} — ${modeBlurb}`)}`);
   console.log(
-    `\n  ${c.dim(`commit mode is ${cfg.commitMode} — CAIRN commits .cairn/ with a cairn: prefix.`)}`,
-  );
-  console.log(
-    `  ${c.dim('prefer your .cairn changes to ride along with code commits? ')}${c.accent('cairn config commit-mode ride-along')}`,
+    `  ${c.dim('change it any time: ')}${c.accent('cairn config commit-mode <batch|auto|ride-along>')}`,
   );
   console.log('');
 }

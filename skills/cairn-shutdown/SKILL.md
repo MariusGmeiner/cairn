@@ -68,11 +68,17 @@ Create/overwrite `.cairn/daily/<today, YYYY-MM-DD>.md`:
 
 The closing phrase is the ritual's point: it signals work is done for the day.
 
-### 5. Persist
+### 5. Persist — flush the day's backlog changes as one commit
 
-Run `cairn commit "shutdown <YYYY-MM-DD>"` — it records the daily summary and any status
-fixes under a `cairn:` prefix, or no-ops in ride-along mode (your next code commit
-carries them). Don't hand-roll the git command; let the tool honor the commit mode.
+Run `cairn commit --flush "shutdown <YYYY-MM-DD>"`. Shutdown is the flush point: under the
+default **batch** mode every capture / plan / sync / ship this session only wrote files
+(deferred), so this single `--flush` lands the whole day's `.cairn/` changes — the daily
+summary, status fixes, the queue, archived ships — as **one** `cairn:` commit. That's what
+keeps the code history readable: management churn collapses to a daily line you can filter
+out with `git log --invert-grep --grep='^cairn:'`.
+
+(`--flush` forces the commit regardless of mode. In ride-along mode, drop it and let the
+changes ride with your next code commit instead.) Don't hand-roll the git command.
 
 ## Draft the team update
 
