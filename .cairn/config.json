@@ -1,5 +1,5 @@
 {
-  "commitMode": "auto",
+  "commitMode": "batch",
   "lastBallot": "2026-06-12",
   "votedFeature": "CAIRN-008",
   "votedFeatureShipped": "2026-06-13"
