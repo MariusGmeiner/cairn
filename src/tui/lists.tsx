@@ -94,7 +94,7 @@ export function BacklogList({
   rows: number;
   width: number;
 }) {
-  const listRows = Math.max(3, rows - 1); // one row spent on the filter chips
+  const listRows = Math.max(3, rows - 2); // filter chips + their bottom margin
   const titleW = Math.max(10, width - 26);
   const { start, end } = windowAround(items.length, selected, listRows);
   return (

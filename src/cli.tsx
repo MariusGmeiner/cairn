@@ -99,8 +99,22 @@ function launchTui(): void {
     process.exitCode = 1;
     return;
   }
+  // Run as a fullscreen app on the alternate screen buffer so the board owns the
+  // viewport and the shell scrollback is left untouched on quit.
+  const ALT_ENTER = '[?1049h';
+  const ALT_LEAVE = '[?1049l';
+  const fullscreen = Boolean(process.stdout.isTTY);
+  let restored = false;
+  const restore = () => {
+    if (restored) return;
+    restored = true;
+    if (fullscreen) process.stdout.write(ALT_LEAVE);
+  };
+  if (fullscreen) process.stdout.write(ALT_ENTER);
+  process.on('exit', restore);
+
   const app = render(<App paths={paths} />);
-  void app.waitUntilExit();
+  app.waitUntilExit().then(restore, restore);
 }
 
 function main(): void {

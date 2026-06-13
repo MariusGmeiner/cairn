@@ -44,12 +44,23 @@ export function App({ paths }: { paths: CairnPaths }) {
   const [backlogSel, setBacklogSel] = useState(0);
   const [filter, setFilter] = useState<TypeFilter>('all');
   const [viewer, setViewer] = useState<{ id: string; scroll: number } | null>(null);
+  const [, bumpResize] = useState(0);
 
   // Live clock (minute granularity is enough).
   useEffect(() => {
     const iv = setInterval(() => setClock(formatClock(new Date())), 15000);
     return () => clearInterval(iv);
   }, []);
+
+  // Re-render on terminal resize so the fullscreen layout re-measures rows/cols.
+  useEffect(() => {
+    if (!stdout) return;
+    const onResize = () => bumpResize((n) => n + 1);
+    stdout.on('resize', onResize);
+    return () => {
+      stdout.off('resize', onResize);
+    };
+  }, [stdout]);
 
   // Ship celebration animation.
   useEffect(() => {
@@ -108,8 +119,10 @@ export function App({ paths }: { paths: CairnPaths }) {
   const boxWidth = clamp(cols - 1, 56, 92);
   const innerWidth = boxWidth - 4;
   const rows = stdout?.rows ?? 24;
-  const contentRows = clamp(rows - 13, 5, 24);
-  const viewerRows = clamp(rows - 11, 6, 30);
+  // Chrome around the tab content: border (2) + header (2) + 2 rules + tab bar = 8.
+  const contentRows = clamp(rows - 8, 4, 60);
+  // The reader drops the tab bar/rule but adds its own header + footer rows.
+  const viewerRows = clamp(rows - 10, 4, 60);
 
   // Derive the views from item status + the queue.
   const queueCards = data.queue
@@ -215,8 +228,9 @@ export function App({ paths }: { paths: CairnPaths }) {
           : '←/→ tabs · q quit';
 
   return (
-    <Box flexDirection="column">
+    <Box flexDirection="column" width={boxWidth} height={rows}>
       <Box
+        flexGrow={1}
         flexDirection="column"
         width={boxWidth}
         borderStyle="round"
@@ -226,16 +240,19 @@ export function App({ paths }: { paths: CairnPaths }) {
         <Header repo={data.repo} clock={clock} width={innerWidth} />
         <Rule width={innerWidth} />
         {viewer ? (
-          <ContentViewer
-            item={viewerItem}
-            scroll={viewer.scroll}
-            rows={viewerRows}
-            width={innerWidth}
-          />
+          <Box flexGrow={1} flexDirection="column">
+            <ContentViewer
+              item={viewerItem}
+              scroll={viewer.scroll}
+              rows={viewerRows}
+              width={innerWidth}
+            />
+          </Box>
         ) : (
           <>
             <TabBar active={tab} inboxCount={inbox.length} width={innerWidth} />
             <Rule width={innerWidth} />
+            <Box flexGrow={1} flexDirection="column" overflow="hidden">
             {tab === 0 && (
               <Box flexDirection="column">
                 <NextAction
@@ -274,6 +291,7 @@ export function App({ paths }: { paths: CairnPaths }) {
               />
             )}
             {tab === 3 && <HelpView skills={data.skills} width={innerWidth} />}
+            </Box>
           </>
         )}
       </Box>
