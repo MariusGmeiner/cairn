@@ -17,9 +17,11 @@ export const palette = {
   empty: 'gray',
   live: 'greenBright',
   // Two-tone "lit from the right": a bright edge catching the light + a shadow body.
+  // The contrast is by HUE (cyan vs blue), not just brightness — so it stays visibly
+  // two-tone even on terminals that render the bright variant the same as the base.
   // Reused across the logo, lettering, rules, and markers for one consistent light source.
   lit: 'cyanBright',
-  shadow: 'cyan',
+  shadow: 'blue',
 } as const;
 
 /** Each backlog type gets one stable color + a short uppercase badge. */
