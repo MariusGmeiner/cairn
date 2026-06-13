@@ -7,7 +7,7 @@ export interface InstallSkillsOptions {
   force?: boolean;
 }
 
-/** Install the four bundled skills into ~/.claude/skills (idempotent unless --force). */
+/** Install the bundled skills into ~/.claude/skills (idempotent unless --force). */
 export function runInstallSkills(opts: InstallSkillsOptions = {}): void {
   const src = bundledSkillsDir();
   const dst = userSkillsDir();

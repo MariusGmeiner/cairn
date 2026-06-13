@@ -82,6 +82,7 @@ skills:
 | `/cairn-sync`      | pull progress from your commits, advance the current action |
 | `/cairn-shutdown`  | Cal-Newport shutdown ritual — daily log + team update     |
 | `/cairn-ballot`    | every 2nd Monday: propose exactly 2 vetted day-or-two options to vote on |
+| `/cairn-loop`      | work the backlog hands-free — implement, commit, sync, repeat |
 
 In the TUI: **`←/→`** switch tabs · **`a`** ship the current action (pop the next) ·
 **`v`** read the full item · **`↑/↓`** move the list selection · **`1–5`** filter the
@@ -139,7 +140,7 @@ The TUI never calls a model. Keep the brain on your subscription:
 ```
 cairn                  open the board (TUI) for the current repo
 cairn init [--bare]    scaffold .cairn/ + install the post-commit hook
-cairn install-skills   install the five skills into ~/.claude/skills [--force]
+cairn install-skills   install the bundled skills into ~/.claude/skills [--force]
 cairn advance          ship the current action + advance (same as [a])
 cairn commit [msg]     commit .cairn changes per commit mode (cairn: prefix / ride-along)
 cairn config           show/set commit mode + ballot cadence
