@@ -1,4 +1,4 @@
 # Queue
-<!-- ordered upcoming items · pre-computed by /plan -->
+<!-- ordered upcoming items · pre-computed by /cairn-plan -->
 
-- CAIRN-008 · Reword onboarding starter from delete to wontdo
+_(empty — run `/cairn-plan` to refill)_

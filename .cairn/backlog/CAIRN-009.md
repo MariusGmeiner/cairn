@@ -8,21 +8,17 @@ type: qol
 area: skills
 benefits: anyone installing cairn alongside other skills — no name clashes
 size: M
-status: inbox
-target:
-notes: open decision — cairn- prefix vs Claude Code plugin/package (cairn:capture)
+status: shipped
+target: the bundled skills are cairn-capture … cairn-ballot (directory + name:), and skills.ts ORDER plus every in-app /command hint use the cairn- names
+notes: decided — simple cairn- prefix (cairn-capture … cairn-ballot, invoked /cairn-capture)
+shipped: 2026-06-13
 ---
-
 The five skills install into the shared `~/.claude/skills/` with very generic names
 (`capture`, `plan`, `sync`, `shutdown`, `ballot`), which can collide with other skills
 there. Give them a CAIRN namespace.
 
-Two approaches (pick one):
-
-- **Simple prefix** — rename to `cairn-capture` … `cairn-ballot` (invoked `/cairn-capture`).
-  Quick, no extra machinery.
-- **Plugin / package** — ship them as a Claude Code plugin so they namespace as
-  `cairn:capture`. Canonical, but needs a plugin manifest + packaging.
+**Decided: the simple `cairn-` prefix.** Rename to `cairn-capture` … `cairn-ballot`
+(invoked `/cairn-capture`). Quick, no plugin manifest/packaging machinery.
 
 Ripple to update together when renaming:
 - the `name:` frontmatter in each `skills/*/SKILL.md`

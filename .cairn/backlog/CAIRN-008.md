@@ -8,11 +8,11 @@ type: qol
 area: cli
 benefits: new users — onboarding matches the real status-driven workflow
 size: S
-status: next
+status: shipped
 target: the seeded starter text tells you to mark items wontdo, not delete them
 notes: src/commands/init.ts (STARTERS — the CAIRN-004 seed)
+shipped: 2026-06-13
 ---
-
 CAIRN's model never deletes backlog items (spec §5): items live forever as files and
 move through statuses, `shipped` = done, `wontdo` = declined (with a reason). But the
 seeded onboarding starter literally says "Delete these starter items", teaching the one

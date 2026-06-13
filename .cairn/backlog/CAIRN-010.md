@@ -8,11 +8,11 @@ type: qol
 area: tui
 benefits: anyone using the board — clearer branding, room for the slogan
 size: S
-status: inbox
-target:
+status: shipped
+target: the TUI header renders two lines — logo + slogan on line 1, repo + date/time on line 2
 notes: src/tui/components.tsx (Header, ~lines 28-40)
+shipped: 2026-06-13
 ---
-
 Make the TUI header two lines:
 
 - **Line 1:** ` ▟█▙ CAIRN · marks your next step` — replace the `▲` mark with `▟█▙` and
