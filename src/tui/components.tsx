@@ -10,7 +10,7 @@ const LOGO_WORD = '⣏⡁ ⡮⡆ ⣹⡁ ⡯⡂ ⣗⣼';
  * the strokes read as catching light from one side. Shared by the logo and the rules.
  */
 function LitText({ text, bold }: { text: string; bold?: boolean }) {
-  const cut = Math.ceil(text.length / 2);
+  const cut = Math.ceil(text.length * 0.75) - 1; // lit edge is the rightmost 25% of the text
   return (
     <Text bold={bold}>
       <Text color={palette.shadow}>{text.slice(0, cut)}</Text>
@@ -35,7 +35,7 @@ function LitWord({ text, bold }: { text: string; bold?: boolean }) {
 
 export function Rule({ width }: { width: number }) {
   const w = Math.max(1, width);
-  const cut = Math.ceil(w / 2);
+  const cut = Math.ceil(w * 0.75) - 1; // lit edge is the rightmost 25% of the width
   return (
     <Text>
       <Text color={palette.shadow}>{'─'.repeat(cut)}</Text>

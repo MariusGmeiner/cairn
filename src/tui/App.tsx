@@ -9,7 +9,7 @@ import { Header, Rule, Footer } from './components.js';
 import { TabBar, TABS } from './Tabs.js';
 import { InboxList, BacklogList, type TypeFilter } from './lists.js';
 import { ContentViewer } from './ContentViewer.js';
-import { HelpView } from './Help.js';
+import { HelpView, buildHelpRows } from './Help.js';
 import { NextAction, ShipFx, SHIP_FRAMES } from './NextAction.js';
 import { palette, clamp } from './theme.js';
 
@@ -44,6 +44,7 @@ export function App({ paths }: { paths: CairnPaths }) {
   const [backlogSel, setBacklogSel] = useState(0);
   const [filter, setFilter] = useState<TypeFilter>('all');
   const [viewer, setViewer] = useState<{ id: string; scroll: number } | null>(null);
+  const [helpScroll, setHelpScroll] = useState(0);
   const [, bumpResize] = useState(0);
 
   // Live clock (minute granularity is enough).
@@ -145,6 +146,8 @@ export function App({ paths }: { paths: CairnPaths }) {
   const progress = data.current.progress ?? 0;
   const nextCard = next[0];
   const viewerItem = viewer ? data.byId.get(viewer.id) : undefined;
+  const helpVisible = Math.max(1, contentRows - 2);
+  const maxHelpScroll = Math.max(0, buildHelpRows(data.skills, innerWidth).length - helpVisible);
 
   useInput((input, key) => {
     // The reader overlay captures all input until closed.
@@ -214,6 +217,11 @@ export function App({ paths }: { paths: CairnPaths }) {
         setFilter('bug');
         setBacklogSel(0);
       }
+      return;
+    }
+    if (tab === 3) {
+      if (key.upArrow) setHelpScroll((s) => Math.max(0, s - 1));
+      else if (key.downArrow) setHelpScroll((s) => Math.min(maxHelpScroll, s + 1));
     }
   });
 
@@ -225,7 +233,7 @@ export function App({ paths }: { paths: CairnPaths }) {
         ? '←/→ tabs · ↑/↓ move · enter read · q quit'
         : tab === 2
           ? '←/→ tabs · ↑/↓ move · 1–5 filter · enter read · q quit'
-          : '←/→ tabs · q quit';
+          : '←/→ tabs · ↑/↓ scroll · q quit';
 
   return (
     <Box flexDirection="column" width={boxWidth} height={rows}>
@@ -252,7 +260,7 @@ export function App({ paths }: { paths: CairnPaths }) {
           <>
             <TabBar active={tab} inboxCount={inbox.length} width={innerWidth} />
             <Rule width={innerWidth} />
-            <Box flexGrow={1} flexDirection="column" overflowY="hidden">
+            <Box flexGrow={1} flexShrink={1} minHeight={0} flexDirection="column" overflowY="hidden">
             {tab === 0 && (
               <Box flexDirection="column">
                 <NextAction
@@ -290,7 +298,14 @@ export function App({ paths }: { paths: CairnPaths }) {
                 width={innerWidth}
               />
             )}
-            {tab === 3 && <HelpView skills={data.skills} width={innerWidth} />}
+            {tab === 3 && (
+              <HelpView
+                skills={data.skills}
+                width={innerWidth}
+                rows={contentRows}
+                scroll={helpScroll}
+              />
+            )}
             </Box>
           </>
         )}

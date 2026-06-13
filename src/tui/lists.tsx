@@ -7,12 +7,14 @@ export type TypeFilter = ItemType | 'all';
 /** Filter chips in keybinding order: position (1-based) is the digit that selects it (1–5). */
 const FILTER_ORDER: TypeFilter[] = ['all', 'core', 'feature', 'qol', 'bug'];
 
-/** A scroll window centered on the selection, clamped to the list bounds. */
+/** A scroll window centered on the selection, clamped to the list bounds. Reserves two
+ *  rows for the ↑/↓ "more" indicators so the list never spills past its row budget. */
 function windowAround(len: number, selected: number, rows: number): { start: number; end: number } {
   if (len <= rows) return { start: 0, end: len };
-  let start = selected - Math.floor(rows / 2);
-  start = Math.max(0, Math.min(start, len - rows));
-  return { start, end: start + rows };
+  const visible = Math.max(1, rows - 2);
+  let start = selected - Math.floor(visible / 2);
+  start = Math.max(0, Math.min(start, len - visible));
+  return { start, end: start + visible };
 }
 
 function MoreRow({ n, dir }: { n: number; dir: 'up' | 'down' }) {

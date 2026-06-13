@@ -1,6 +1,7 @@
 import { Box, Text } from 'ink';
+import type { ReactNode } from 'react';
 import type { SkillInfo } from '../core/skills.js';
-import { palette, truncate } from './theme.js';
+import { palette, truncate, clamp } from './theme.js';
 
 interface HelpLine {
   key: string;
@@ -21,7 +22,7 @@ const TABKEYS: HelpLine[] = [
   { key: '←/→', text: 'switch tabs' },
   { key: 'a', text: 'mark the current action shipped' },
   { key: 'enter', text: 'open / close the selected item in the reader' },
-  { key: '↑/↓', text: 'move the selection in Inbox / Backlog · scroll in the reader' },
+  { key: '↑/↓', text: 'move the selection / scroll the list, reader, and this view' },
   { key: '1–5', text: 'filter the Backlog by type (all / core / feat / qol / bug)' },
   { key: 'q', text: 'quit' },
 ];
@@ -29,59 +30,98 @@ const TABKEYS: HelpLine[] = [
 function Line({ k, text, width }: { k: string; text: string; width: number }) {
   return (
     <Box>
-      <Box width={11}>
+      <Box width={16}>
         <Text color={palette.accent} bold>
           {k}
         </Text>
       </Box>
-      <Text color={palette.text}>{truncate(text, Math.max(20, width - 13))}</Text>
+      <Text color={palette.text}>{truncate(text, Math.max(20, width - 18))}</Text>
     </Box>
   );
 }
 
-/** The Help tab: how the workflow fits together, the keys, and the Claude skills. */
-export function HelpView({ skills, width }: { skills: SkillInfo[]; width: number }) {
-  const anyInstalled = skills.some((s) => s.installed);
+function SkillRow({ s, width }: { s: SkillInfo; width: number }) {
+  return (
+    <Box>
+      <Box width={16}>
+        <Text color={s.installed ? palette.accent : palette.dim} bold>{`/${s.name}`}</Text>
+      </Box>
+      <Text color={s.installed ? palette.text : palette.dim}>
+        {truncate(s.description, Math.max(20, width - 18))}
+      </Text>
+    </Box>
+  );
+}
+
+function Heading({ children }: { children: ReactNode }) {
+  return (
+    <Text color={palette.heading} bold>
+      {children}
+    </Text>
+  );
+}
+
+/** The Help tab flattened to one row per line, so it can be windowed and scrolled. */
+export function buildHelpRows(skills: SkillInfo[], width: number): ReactNode[] {
+  const rows: ReactNode[] = [];
+  rows.push(<Heading key="h-loop">The loop</Heading>);
+  FLOW.forEach((l, i) => rows.push(<Line key={`f${i}`} k={l.key} text={l.text} width={width} />));
+  rows.push(<Text key="b1"> </Text>);
+  rows.push(<Heading key="h-keys">Keys</Heading>);
+  TABKEYS.forEach((l, i) => rows.push(<Line key={`t${i}`} k={l.key} text={l.text} width={width} />));
+  rows.push(<Text key="b2"> </Text>);
+  rows.push(
+    <Text key="h-skills">
+      <Text color={palette.heading} bold>
+        Claude skills
+      </Text>
+      <Text color={palette.dim}>{'  · run in the Claude Code pane'}</Text>
+    </Text>,
+  );
+  if (skills.length === 0) {
+    rows.push(
+      <Text key="noskills" color={palette.dim}>
+        no skills found · run `cairn install-skills`
+      </Text>,
+    );
+  }
+  skills.forEach((s) => rows.push(<SkillRow key={s.name} s={s} width={width} />));
+  if (skills.length > 0 && !skills.some((s) => s.installed)) {
+    rows.push(
+      <Text key="bundled" color={palette.dim}>
+        (showing bundled copies — `cairn install-skills` to enable)
+      </Text>,
+    );
+  }
+  return rows;
+}
+
+/** The Help tab: workflow, keys, and skills — windowed so it never spills past the box. */
+export function HelpView({
+  skills,
+  width,
+  rows,
+  scroll,
+}: {
+  skills: SkillInfo[];
+  width: number;
+  rows: number;
+  scroll: number;
+}) {
+  const all = buildHelpRows(skills, width);
+  const total = all.length;
+  if (total <= rows) {
+    return <Box flexDirection="column">{all}</Box>;
+  }
+  const visible = Math.max(1, rows - 2);
+  const top = clamp(scroll, 0, total - visible);
+  const above = top;
+  const below = total - (top + visible);
   return (
     <Box flexDirection="column">
-      <Text color={palette.heading} bold>
-        The loop
-      </Text>
-      {FLOW.map((l) => (
-        <Line key={l.key} k={l.key} text={l.text} width={width} />
-      ))}
-
-      <Box marginTop={1}>
-        <Text color={palette.heading} bold>
-          Keys
-        </Text>
-      </Box>
-      {TABKEYS.map((l) => (
-        <Line key={l.key} k={l.key} text={l.text} width={width} />
-      ))}
-
-      <Box marginTop={1}>
-        <Text color={palette.heading} bold>
-          Claude skills
-        </Text>
-        <Text color={palette.dim}>{'  · run in the Claude Code pane'}</Text>
-      </Box>
-      {skills.length === 0 && (
-        <Text color={palette.dim}>no skills found · run `cairn install-skills`</Text>
-      )}
-      {skills.map((s) => (
-        <Box key={s.name}>
-          <Box width={11}>
-            <Text color={s.installed ? palette.accent : palette.dim} bold>{`/${s.name}`}</Text>
-          </Box>
-          <Text color={s.installed ? palette.text : palette.dim}>
-            {truncate(s.description, Math.max(20, width - 13))}
-          </Text>
-        </Box>
-      ))}
-      {!anyInstalled && skills.length > 0 && (
-        <Text color={palette.dim}>(showing bundled copies — `cairn install-skills` to enable)</Text>
-      )}
+      <Text color={palette.dim}>{above > 0 ? `  ↑ ${above} more` : ''}</Text>
+      {all.slice(top, top + visible)}
+      <Text color={palette.dim}>{below > 0 ? `  ↓ ${below} more` : ''}</Text>
     </Box>
   );
 }
