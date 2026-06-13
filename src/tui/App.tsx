@@ -237,7 +237,7 @@ export function App({ paths }: { paths: CairnPaths }) {
         borderColor={palette.accent}
         paddingX={1}
       >
-        <Header repo={data.repo} clock={clock} width={innerWidth} />
+        <Header repo={data.repo} clock={clock} />
         <Rule width={innerWidth} />
         {viewer ? (
           <Box flexGrow={1} flexDirection="column">
@@ -252,7 +252,7 @@ export function App({ paths }: { paths: CairnPaths }) {
           <>
             <TabBar active={tab} inboxCount={inbox.length} width={innerWidth} />
             <Rule width={innerWidth} />
-            <Box flexGrow={1} flexDirection="column" overflow="hidden">
+            <Box flexGrow={1} flexDirection="column" overflowY="hidden">
             {tab === 0 && (
               <Box flexDirection="column">
                 <NextAction

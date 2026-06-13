@@ -89,10 +89,10 @@ function DoneHint() {
 }
 
 /** Top row of the idle Next view: the section label, the clickable id, the type badge. */
-function ActiveHeader({ item, width }: { item: BacklogItem; width: number }) {
+function ActiveHeader({ item }: { item: BacklogItem }) {
   const s = typeStyle[item.type];
   return (
-    <Box justifyContent="space-between" width={width}>
+    <Box justifyContent="space-between">
       <Text color={palette.heading} bold>
         NEXT ACTION
       </Text>
@@ -128,7 +128,7 @@ function Idle({ item, progress, width }: { item?: BacklogItem; progress: number;
   }
   return (
     <Box flexDirection="column">
-      <ActiveHeader item={item} width={width} />
+      <ActiveHeader item={item} />
       <Box marginTop={1}>
         <Text color={palette.accent} bold>
           ▸{' '}

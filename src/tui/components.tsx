@@ -3,7 +3,7 @@ import { palette } from './theme.js';
 
 /** The braille brand mark: a small pile + the CAIRN wordmark. */
 const LOGO_PILE = '⣠⣾⣷⣄';
-const LOGO_WORD = '⣏⡁⡮⡆⣹⡁⡯⡂⡗⡅';
+const LOGO_WORD = '⣏⡁⡮⡆⣹⡁⡯⡂⣗⣼';
 
 /**
  * Render text "lit from the right": the left body in shadow, the right edge bright, so
@@ -31,10 +31,8 @@ export function Rule({ width }: { width: number }) {
 }
 
 /** Two-line header: braille logo + slogan on top, "Project: <repo>" + live clock below. */
-export function Header({ repo, clock, width }: { repo: string; clock: string; width: number }) {
+export function Header({ repo, clock }: { repo: string; clock: string }) {
   const slogan = ' · marks your next step';
-  const label = ' Project: ';
-  const gap = Math.max(1, width - label.length - repo.length - clock.length);
   return (
     <Box flexDirection="column">
       <Box>
@@ -44,10 +42,11 @@ export function Header({ repo, clock, width }: { repo: string; clock: string; wi
         <LitText text={LOGO_WORD} bold />
         <Text color={palette.dim}>{slogan}</Text>
       </Box>
-      <Box>
-        <Text color={palette.dim}>{label}</Text>
-        <Text color={palette.heading}>{repo}</Text>
-        <Text>{' '.repeat(gap)}</Text>
+      <Box justifyContent="space-between">
+        <Box>
+          <Text color={palette.dim}>{' Project: '}</Text>
+          <Text color={palette.heading}>{repo}</Text>
+        </Box>
         <Text color={palette.dim}>{clock}</Text>
       </Box>
     </Box>
