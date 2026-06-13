@@ -25,6 +25,44 @@ function writeIfAbsent(file: string, content: string): boolean {
   return true;
 }
 
+const IGNORE_COMMENT = '# CAIRN local, derived — keep out of git';
+const ACTIVITY_IGNORE = '.cairn/activity/';
+
+/**
+ * Ensure the repo's root .gitignore ignores the derived activity log. Idempotent:
+ * re-running is a no-op once the entry is present (with or without a trailing slash).
+ */
+function ensureActivityIgnored(rootGitignore: string): 'created' | 'appended' | 'already' {
+  if (!fs.existsSync(rootGitignore)) {
+    fs.writeFileSync(rootGitignore, `${IGNORE_COMMENT}\n${ACTIVITY_IGNORE}\n`);
+    return 'created';
+  }
+  const existing = fs.readFileSync(rootGitignore, 'utf8');
+  const present = existing
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .some((l) => l === ACTIVITY_IGNORE || l === '.cairn/activity');
+  if (present) return 'already';
+  const lead = existing.length > 0 && !existing.endsWith('\n') ? '\n' : '';
+  fs.appendFileSync(rootGitignore, `${lead}\n${IGNORE_COMMENT}\n${ACTIVITY_IGNORE}\n`);
+  return 'appended';
+}
+
+/**
+ * Earlier inits wrote a nested .cairn/.gitignore (ignoring `activity/`). The root
+ * .gitignore now owns that rule, so drop the nested file — but only if it still holds
+ * exactly what we generated, never a file the user has since customized.
+ */
+function dropLegacyNestedIgnore(cairnDir: string): boolean {
+  const nested = path.join(cairnDir, '.gitignore');
+  const LEGACY = `${IGNORE_COMMENT}\nactivity/\n`;
+  if (fs.existsSync(nested) && fs.readFileSync(nested, 'utf8') === LEGACY) {
+    fs.rmSync(nested);
+    return true;
+  }
+  return false;
+}
+
 interface SeedItem {
   id: string;
   title: string;
@@ -198,10 +236,8 @@ export function runInit(opts: InitOptions = {}): void {
   for (const dir of [paths.backlog, paths.board, paths.daily, paths.activity]) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  const wroteGitignore = writeIfAbsent(
-    paths.gitignore,
-    '# CAIRN local, derived — keep out of git\nactivity/\n',
-  );
+  const ignore = ensureActivityIgnored(paths.rootGitignore);
+  const droppedNested = dropLegacyNestedIgnore(paths.cairn);
   const wroteConfig = !fs.existsSync(configPath(paths));
   if (wroteConfig) writeConfig(paths, { commitMode: 'auto' });
   const cfg = readConfig(paths);
@@ -223,8 +259,14 @@ export function runInit(opts: InitOptions = {}): void {
   console.log(
     `  ${fresh ? c.good('✓ created') : c.dim('• present')}  ${c.dim('.cairn/')} ${c.dim('(backlog · board · daily · activity)')}`,
   );
-  if (wroteGitignore)
-    console.log(`  ${c.good('✓ wrote')}    ${c.dim('.cairn/.gitignore')} ${c.dim('(ignores activity/)')}`);
+  const ignoreMsg = {
+    created: `${c.good('✓ wrote')}    ${c.dim('.gitignore')} ${c.dim('(ignores .cairn/activity/)')}`,
+    appended: `${c.good('✓ updated')}  ${c.dim('.gitignore')} ${c.dim('(ignores .cairn/activity/)')}`,
+    already: `${c.dim('• present')}   ${c.dim('.gitignore already ignores .cairn/activity/')}`,
+  }[ignore];
+  console.log(`  ${ignoreMsg}`);
+  if (droppedNested)
+    console.log(`  ${c.dim('• removed')}   ${c.dim('legacy .cairn/.gitignore (moved to root)')}`);
   if (wroteConfig)
     console.log(
       `  ${c.good('✓ wrote')}    ${c.dim('.cairn/config.json')} ${c.dim(`(commit mode: ${cfg.commitMode})`)}`,

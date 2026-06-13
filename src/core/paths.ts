@@ -43,7 +43,7 @@ export interface CairnPaths {
   daily: string;
   activity: string;
   activityLog: string;
-  gitignore: string;
+  rootGitignore: string;
 }
 
 /** All the well-known paths inside a repo's .cairn/ folder. */
@@ -61,7 +61,7 @@ export function cairnPaths(root: string): CairnPaths {
     daily: path.join(cairn, 'daily'),
     activity,
     activityLog: path.join(activity, 'log.jsonl'),
-    gitignore: path.join(cairn, '.gitignore'),
+    rootGitignore: path.join(root, '.gitignore'),
   };
 }
 
