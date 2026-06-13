@@ -25,19 +25,24 @@ export function Header({
   clock: string;
   width: number;
 }) {
-  const left = ' ▲ CAIRN';
-  const repoTag = ` · ${repo}`;
-  const right = clock;
-  const used = left.length + repoTag.length + right.length;
-  const gap = Math.max(1, width - used);
+  const logo = ' ▟█▙ CAIRN';
+  const slogan = ' · marks your next step';
+  // Line 2: repo on the left, the live clock on the right, pushed apart.
+  const repoTag = ` ${repo}`;
+  const gap = Math.max(1, width - repoTag.length - clock.length);
   return (
-    <Box>
-      <Text color={palette.accent} bold>
-        {left}
-      </Text>
-      <Text color={palette.dim}>{repoTag}</Text>
-      <Text>{' '.repeat(gap)}</Text>
-      <Text color={palette.dim}>{right}</Text>
+    <Box flexDirection="column">
+      <Box>
+        <Text color={palette.accent} bold>
+          {logo}
+        </Text>
+        <Text color={palette.dim}>{slogan}</Text>
+      </Box>
+      <Box>
+        <Text color={palette.text}>{repoTag}</Text>
+        <Text>{' '.repeat(gap)}</Text>
+        <Text color={palette.dim}>{clock}</Text>
+      </Box>
     </Box>
   );
 }
