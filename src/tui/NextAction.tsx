@@ -81,7 +81,7 @@ function DoneHint() {
       </Text>
       <Text color={palette.dim}>{' to mark shipped   ·   '}</Text>
       <Text color={palette.accent} bold>
-        v
+        Enter
       </Text>
       <Text color={palette.dim}>{' to read the full item'}</Text>
     </Box>

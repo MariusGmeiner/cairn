@@ -149,7 +149,7 @@ export function App({ paths }: { paths: CairnPaths }) {
   useInput((input, key) => {
     // The reader overlay captures all input until closed.
     if (viewer) {
-      if (key.escape || input === 'v' || input === 'q') setViewer(null);
+      if (key.escape || key.return || input === 'q') setViewer(null);
       else if (key.upArrow || input === 'k')
         setViewer((v) => (v ? { ...v, scroll: Math.max(0, v.scroll - 1) } : v));
       else if (key.downArrow || input === 'j')
@@ -172,12 +172,12 @@ export function App({ paths }: { paths: CairnPaths }) {
       setTab((t) => (t + 1) % TABS.length);
       return;
     }
-    if (input === 'a' || (key.return && phase === 'idle')) {
+    if (input === 'a') {
       setTab(0);
       onAdvance();
       return;
     }
-    if (input === 'v') {
+    if (key.return) {
       const target =
         tab === 0
           ? activeItem
@@ -218,13 +218,13 @@ export function App({ paths }: { paths: CairnPaths }) {
   });
 
   const footerKeys = viewer
-    ? '↑/↓ scroll · esc close'
+    ? '↑/↓ scroll · enter/esc close'
     : tab === 0
-      ? '←/→ tabs · a ship · v read · q quit'
+      ? '←/→ tabs · a ship · enter read · q quit'
       : tab === 1
-        ? '←/→ tabs · ↑/↓ move · v read · q quit'
+        ? '←/→ tabs · ↑/↓ move · enter read · q quit'
         : tab === 2
-          ? '←/→ tabs · ↑/↓ move · 1–5 filter · q quit'
+          ? '←/→ tabs · ↑/↓ move · 1–5 filter · enter read · q quit'
           : '←/→ tabs · q quit';
 
   return (

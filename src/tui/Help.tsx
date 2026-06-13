@@ -20,7 +20,7 @@ const FLOW: HelpLine[] = [
 const TABKEYS: HelpLine[] = [
   { key: '←/→', text: 'switch tabs' },
   { key: 'a', text: 'mark the current action shipped' },
-  { key: 'v', text: 'open the selected item in a scrollable reader' },
+  { key: 'enter', text: 'open / close the selected item in the reader' },
   { key: '↑/↓', text: 'move the selection in Inbox / Backlog · scroll in the reader' },
   { key: '1–5', text: 'filter the Backlog by type (all / core / feat / qol / bug)' },
   { key: 'q', text: 'quit' },
