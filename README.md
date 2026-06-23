@@ -58,7 +58,7 @@ git clone <this repo> && cd cairn
 npm install          # also builds via "prepare"
 npm link             # puts `cairn` on your PATH
 
-cairn install-skills # add /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown /cairn-ballot to ~/.claude/skills
+cairn install-skills # add /cairn-capture /cairn-intake /cairn-plan /cairn-sync /cairn-shutdown /cairn-ballot /cairn-loop to ~/.claude/skills
 ```
 
 > Requires Node ≥ 18 and git. Renders in Windows Terminal / Git Bash (box-drawing +

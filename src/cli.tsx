@@ -31,7 +31,7 @@ function help(): void {
   ${c.heading('Usage')}
     ${A('cairn')}                  ${D('open the board (TUI) for the current repo')}
     ${A('cairn init')}             ${D('scaffold .cairn/ and install the post-commit hook')}
-    ${A('cairn install-skills')}   ${D('install /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown into ~/.claude/skills')}
+    ${A('cairn install-skills')}   ${D('install /cairn-capture /cairn-intake /cairn-plan /cairn-sync /cairn-shutdown /cairn-ballot /cairn-loop into ~/.claude/skills')}
     ${A('cairn advance')}          ${D('mark the current action done + advance (same as [a] in the TUI)')}
     ${A('cairn commit [msg]')}     ${D('commit .cairn changes per commit mode (--flush forces one now)')}
     ${A('cairn config')}           ${D('show/set commit mode (batch default) + ballot cadence')}

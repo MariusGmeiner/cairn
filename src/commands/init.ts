@@ -291,7 +291,7 @@ export function runInit(opts: InitOptions = {}): void {
 
   console.log('\n  ' + c.heading('Next:'));
   console.log(
-    `    ${c.accent('cairn install-skills')}   ${c.dim('— add /cairn-capture /cairn-plan /cairn-sync /cairn-shutdown to Claude Code')}`,
+    `    ${c.accent('cairn install-skills')}   ${c.dim('— add /cairn-capture /cairn-intake /cairn-plan /cairn-sync /cairn-shutdown /cairn-ballot /cairn-loop to Claude Code')}`,
   );
   console.log(
     `    ${c.accent('cairn')}                  ${c.dim('— open the board (left pane); run Claude Code on the right')}`,
