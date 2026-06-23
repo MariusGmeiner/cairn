@@ -78,6 +78,7 @@ skills:
 | skill              | what it does                                              |
 |--------------------|-----------------------------------------------------------|
 | `/cairn-capture`   | add a request — asks the open questions, triages, files it |
+| `/cairn-intake`    | break a plan / spec / conversation into a batch of triaged backlog items |
 | `/cairn-plan`      | refresh Now / Next / Later + pre-compute the next-action queue |
 | `/cairn-sync`      | pull progress from your commits, advance the current action |
 | `/cairn-shutdown`  | Cal-Newport shutdown ritual — daily log + team update     |
