@@ -65,7 +65,14 @@ export function advance(paths: CairnPaths, now: Date = new Date()): AdvanceResul
   }
 
   const queue = readQueue(paths.queue);
-  const nextId = queue.shift();
+  // Defensive pop: a freshly-planned queue can still carry the active item at its
+  // head (current.id === queue[0]). The item we just shipped was archived above, so
+  // promoting it again would set status on its now-missing backlog path and crash.
+  // Skip any leading entries equal to the just-shipped id.
+  let nextId = queue.shift();
+  while (nextId && shipped && nextId === shipped.id) {
+    nextId = queue.shift();
+  }
 
   if (!nextId) {
     writeCurrent(paths.current, {});
