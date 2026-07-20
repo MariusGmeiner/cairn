@@ -1,16 +1,29 @@
 import { Box, Text } from 'ink';
 import type { BacklogItem } from '../core/backlog.js';
-import { palette, wrapText, clamp } from './theme.js';
+import { palette, clamp, link } from './theme.js';
+import { renderBody, type Row } from './markdown.js';
 
-/** Split an item body into display rows wrapped to `width`, trimming blank edges. */
-function bodyRows(body: string, width: number): string[] {
-  const rows = body
-    .replace(/\r\n/g, '\n')
-    .split('\n')
-    .flatMap((line) => wrapText(line, width));
-  while (rows.length > 0 && rows[0].trim() === '') rows.shift();
-  while (rows.length > 0 && rows[rows.length - 1].trim() === '') rows.pop();
-  return rows;
+/** Draw one row of styled markdown segments as a single Ink line. */
+function MarkdownRow({ row }: { row: Row }) {
+  if (row.every((seg) => seg.text === '')) return <Text> </Text>;
+  // `truncate-end`, not the default wrap: the pager counts one logical row per line,
+  // so a row Ink decides to re-wrap would push the rest of the body out of view.
+  return (
+    <Text wrap="truncate-end">
+      {row.map((seg, i) => (
+        <Text
+          key={i}
+          color={seg.color ?? palette.text}
+          bold={seg.bold}
+          italic={seg.italic}
+          dimColor={seg.dim}
+          strikethrough={seg.strikethrough}
+        >
+          {seg.href ? link(seg.text, seg.href) : seg.text}
+        </Text>
+      ))}
+    </Text>
+  );
 }
 
 /**
@@ -35,7 +48,7 @@ export function ContentViewer({
       </Box>
     );
   }
-  const lines = bodyRows(item.body, width);
+  const lines = renderBody(item.body, width);
   const maxScroll = Math.max(0, lines.length - rows);
   const top = clamp(scroll, 0, maxScroll);
   const above = top;
@@ -55,11 +68,7 @@ export function ContentViewer({
         {lines.length === 0 ? (
           <Text color={palette.dim}>(no body — this item is frontmatter only)</Text>
         ) : (
-          lines.slice(top, top + rows).map((ln, i) => (
-            <Text key={top + i} color={palette.text}>
-              {ln === '' ? ' ' : ln}
-            </Text>
-          ))
+          lines.slice(top, top + rows).map((row, i) => <MarkdownRow key={top + i} row={row} />)
         )}
       </Box>
       <Box justifyContent="space-between" width={width} marginTop={1}>
