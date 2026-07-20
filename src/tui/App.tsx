@@ -248,7 +248,9 @@ export function App({ paths }: { paths: CairnPaths }) {
         <Header repo={data.repo} clock={clock} />
         <Rule width={innerWidth} />
         {viewer ? (
-          <Box flexGrow={1} flexDirection="column">
+          // minHeight/overflow, like the board below: if the frame ever runs tall, the
+          // reader clips its own tail instead of squeezing the header out of shape.
+          <Box flexGrow={1} flexShrink={1} minHeight={0} flexDirection="column" overflowY="hidden">
             <ContentViewer
               item={viewerItem}
               scroll={viewer.scroll}

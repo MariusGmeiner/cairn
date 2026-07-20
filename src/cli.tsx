@@ -99,6 +99,18 @@ function launchTui(): void {
     process.exitCode = 1;
     return;
   }
+  // CAIRN_DEBUG=<file> tees every byte we write to the terminal into that file. The
+  // terminal still renders normally — the point is to compare what we emit against
+  // what the terminal shows, which is the only way to tell a draw bug from a conpty one.
+  if (process.env.CAIRN_DEBUG) {
+    const log = fs.createWriteStream(process.env.CAIRN_DEBUG, { flags: 'w' });
+    const original = process.stdout.write.bind(process.stdout);
+    process.stdout.write = ((chunk: string | Uint8Array, ...rest: unknown[]) => {
+      log.write(typeof chunk === 'string' ? chunk : Buffer.from(chunk).toString('utf8'));
+      return (original as (...a: unknown[]) => boolean)(chunk, ...rest);
+    }) as typeof process.stdout.write;
+  }
+
   // Run as a fullscreen app on the alternate screen buffer so the board owns the
   // viewport and the shell scrollback is left untouched on quit.
   const ALT_ENTER = '[?1049h';
