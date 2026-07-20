@@ -117,7 +117,8 @@ export function App({ paths }: { paths: CairnPaths }) {
   }, [phase, data.current.progress, paths, reload, flash]);
 
   const cols = stdout?.columns ?? 80;
-  const boxWidth = clamp(cols - 1, 56, 92);
+  // Fill the terminal, minus one column so the frame never touches the last cell.
+  const boxWidth = Math.max(56, cols - 1);
   const innerWidth = boxWidth - 4;
   const rows = stdout?.rows ?? 24;
   // Chrome around the tab content: border (2) + header (2) + 2 rules + tab bar = 8.
